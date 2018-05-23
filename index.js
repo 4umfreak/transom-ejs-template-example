@@ -22,6 +22,14 @@ transom.initialize(myApi).then(function (server) {
     // ****************************************************************************
     server.get('/', function (req, res, next) {
 
+        req.log.trace('This is a TRACE entry.');
+        req.log.debug('This is a DEBUG entry.');
+        req.log.info('This is a INFO entry.');
+        req.log.warn('This is a WARN entry.');
+        req.log.error('This is a ERROR entry.');
+        req.log.fatal('This is a FATAL entry.');
+        server.log.warn('SERVER can do logging too!');
+
         // Fetch the configured Template module from the Registry.
         const template = server.registry.get('transomTemplate');
 
