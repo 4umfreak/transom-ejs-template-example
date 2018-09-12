@@ -7,7 +7,7 @@ module.exports = {
 			streams: [
 				{
 					stream: process.stdout,
-					level: "debug"
+					level: "info"
 				}
 			]
 		}		
@@ -15,7 +15,10 @@ module.exports = {
 	definition: {
 		template: {
 			emailTemplatePath: 'my-email-templates',
-			htmlTemplatePath: 'my-html-templates'
+			htmlTemplatePath: 'my-html-templates',
+			data: {
+				processInfo: `Running on ${process.platform}, Process Id: ${process.pid}`
+			}
 		}
 	}
 };

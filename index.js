@@ -1,15 +1,12 @@
 'use strict';
 
+const opn = require('opn');
 const Transom = require('@transomjs/transom-core');
-const transomTemplate = require('@transomjs/transom-ejs-template');
+const transomEjs = require('@transomjs/transom-ejs-template');
 
 const transom = new Transom();
+transom.configure(transomEjs);
 
-transom.configure(transomTemplate);
-
-// ****************************************************************************
-// This sample app doesn't use any metadata from the API definition.
-// ****************************************************************************
 const myApi = require('./myApi');
 console.log("Running " + myApi.name);
 
@@ -22,8 +19,8 @@ transom.initialize(myApi).then(function (server) {
     // ****************************************************************************
     server.get('/', function (req, res, next) {
 
-        req.log.trace('This is a TRACE entry.');
-        req.log.debug('This is a DEBUG entry.');
+        req.log.trace('This is a TRACE entry, but the log level is INFO, so you\'ll never see it!');
+        req.log.debug('This is a DEBUG entry, but the log level is INFO, so you\'ll never see it!');
         req.log.info('This is a INFO entry.');
         req.log.warn('This is a WARN entry.');
         req.log.error('This is a ERROR entry.');
@@ -51,7 +48,7 @@ transom.initialize(myApi).then(function (server) {
     // Handle 404 errors when a route is undefined.
     // ****************************************************************************
     server.get('.*', function (req, res, next) {
-        var err = new Error(req.url + " does not exist");
+        const err = new Error(req.url + " does not exist");
         err.status = 404;
         next(err);
     });
@@ -61,7 +58,7 @@ transom.initialize(myApi).then(function (server) {
     // ****************************************************************************
     server.use(function (error, req, res, next) {
         console.error("Error handler", error);
-        var data = {};
+        const data = {};
         data.error = error;
         res.statusCode = error.status || 501;
         res.send(data);
@@ -72,6 +69,7 @@ transom.initialize(myApi).then(function (server) {
     // ****************************************************************************
     server.listen(7070, function () {
         console.log('%s listening at %s', server.name, server.url);
+        opn(server.url);
     });
 
 });
